@@ -1,0 +1,8 @@
+**/bin/
+**/obj/
+*.user
+.vs/
+dist/
+serverdb.json
+server.json
+launcher_config.json

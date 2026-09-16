@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/BerdaKeyGen/BerdaKeyGen.csproj" />
+    <Project Path="src/BerdaLauncher/BerdaLauncher.csproj" />
+    <Project Path="src/BerdaServer/BerdaServer.csproj" />
+    <Project Path="src/BerdaShared/BerdaShared.csproj" />
+  </Folder>
+</Solution>

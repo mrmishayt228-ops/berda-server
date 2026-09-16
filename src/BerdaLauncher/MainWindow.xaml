@@ -1,0 +1,252 @@
+﻿<Window x:Class="BerdaLauncher.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:BerdaLauncher"
+        Title="Berda Launcher"
+        Width="470" Height="670"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        ResizeMode="NoResize"
+        FontFamily="Segoe UI"
+        UseLayoutRounding="True"
+        SnapsToDevicePixels="True">
+
+    <Window.Resources>
+        <Style x:Key="WhiteBtn" TargetType="Button">
+            <Setter Property="Background" Value="{StaticResource BrWhite}"/>
+            <Setter Property="Foreground" Value="{StaticResource BrDarkText}"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Height" Value="48"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="bd" Background="{TemplateBinding Background}" CornerRadius="14"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="bd" Property="Opacity" Value="0.9"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="bd" Property="Opacity" Value="0.78"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="bd" Property="Opacity" Value="0.35"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Border CornerRadius="18" BorderThickness="1" BorderBrush="{StaticResource BrBorder}">
+        <Border.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Offset="0.0" Color="#1E0E3C"/>
+                <GradientStop Offset="0.55" Color="#2B125A"/>
+                <GradientStop Offset="1.0" Color="#4A1E86"/>
+            </LinearGradientBrush>
+        </Border.Background>
+
+        <Grid>
+            <!-- floating particles behind everything -->
+            <local:ParticlesControl x:Name="Particles"/>
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="42"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <!-- ============ title bar ============ -->
+                <Grid x:Name="TitleBar" Grid.Row="0" Background="Transparent" MouseLeftButtonDown="TitleBar_MouseLeftButtonDown">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="16,0,0,0">
+                        <TextBlock Text="BERDA" FontSize="14" FontWeight="Bold" Foreground="{StaticResource BrText}"/>
+                        <TextBlock Text="  LAUNCHER" FontSize="12" Foreground="{StaticResource BrAccent2}" VerticalAlignment="Bottom" Margin="0,0,0,1"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,6,8,0">
+                        <Button Style="{StaticResource IconBarBtn}" Click="MinimizeBtn_Click" Content="&#xE921;" FontFamily="Segoe MDL2 Assets" ToolTip="Свернуть"/>
+                        <Button Style="{StaticResource IconBarBtn}" Click="CloseBtn_Click" Content="&#xE8BB;" FontFamily="Segoe MDL2 Assets" ToolTip="Закрыть"/>
+                    </StackPanel>
+                </Grid>
+
+                <!-- ============ content host ============ -->
+                <Grid Grid.Row="1">
+
+                    <!-- ============ LOGIN ============ -->
+                    <Grid x:Name="LoginPanel">
+                        <StackPanel Width="300" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <TextBlock Text="BERDA SURVIVAL" FontSize="30" FontWeight="Bold"
+                                       Foreground="{StaticResource BrText}" HorizontalAlignment="Center" TextAlignment="Center"/>
+                            <TextBlock Text="премиум лаунчер" FontSize="13" Foreground="{StaticResource BrAccent2}"
+                                       HorizontalAlignment="Center" Margin="0,4,0,26"/>
+                            <local:HintBox x:Name="LoginField" Hint="Логин" Height="42" Style="{StaticResource HintInput}"/>
+                            <Grid Height="42" Margin="0,10,0,0">
+                                <Border Background="{StaticResource BrInputBg}" BorderBrush="{StaticResource BrInputBorder}"
+                                        BorderThickness="1" CornerRadius="9"/>
+                                <TextBlock x:Name="PassFieldHint" Text="Пароль" Foreground="{StaticResource BrTextFaint}"
+                                           FontSize="14" Margin="13,0,12,0" VerticalAlignment="Center" IsHitTestVisible="False"/>
+                                <PasswordBox x:Name="PassField" Background="Transparent" BorderThickness="0"
+                                             Foreground="{StaticResource BrText}" CaretBrush="{StaticResource BrAccent}"
+                                             FontSize="14" VerticalContentAlignment="Center" Margin="10,0,10,0"
+                                             KeyDown="PassField_KeyDown"/>
+                            </Grid>
+                            <TextBlock x:Name="LoginStatus" Foreground="#FFFF6E6E" FontSize="12" Margin="2,8,0,0"
+                                       TextWrapping="Wrap" Visibility="Collapsed"/>
+                            <Button x:Name="LoginBtn" Style="{StaticResource AccentBtn}" Content="ВОЙТИ"
+                                    Height="46" Margin="0,14,0,0" Click="LoginBtn_Click"/>
+                            <Button x:Name="GotoRegBtn" Style="{StaticResource GhostBtn}" Content="Регистрация нового аккаунта"
+                                    Margin="0,10,0,0" Click="GotoRegBtn_Click"/>
+                            <Button x:Name="ServerToggle" Style="{StaticResource GhostBtn}" Content="Сервер..."
+                                    Margin="0,6,0,0" Click="ServerToggle_Click"/>
+                            <Grid x:Name="ServerGrid" Margin="0,8,0,0" Visibility="Collapsed">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <local:HintBox x:Name="ServerField" Hint="http://127.0.0.1:8080" Height="36"
+                                               Style="{StaticResource HintInput}"/>
+                                <Button Grid.Column="1" Content="OK" Style="{StaticResource AccentBtn}" Width="52"
+                                        Height="36" Margin="8,0,0,0" Click="ServerSave_Click"/>
+                            </Grid>
+                        </StackPanel>
+                        <TextBlock Text="v1.0 • by Berda" FontSize="11" Foreground="{StaticResource BrTextFaint}"
+                                   HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,14"/>
+                    </Grid>
+
+                    <!-- ============ REGISTER ============ -->
+                    <Grid x:Name="RegisterPanel" Visibility="Collapsed">
+                        <StackPanel Width="300" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <TextBlock Text="СОЗДАТЬ АККАУНТ" FontSize="22" FontWeight="Bold"
+                                       Foreground="{StaticResource BrText}" HorizontalAlignment="Center" Margin="0,0,0,22"/>
+                            <local:HintBox x:Name="RegLoginField" Hint="Логин (3–24: буквы/цифры/_ )" Height="42" Style="{StaticResource HintInput}"/>
+                            <Grid Height="42" Margin="0,10,0,0">
+                                <Border Background="{StaticResource BrInputBg}" BorderBrush="{StaticResource BrInputBorder}"
+                                        BorderThickness="1" CornerRadius="9"/>
+                                <TextBlock x:Name="RegPassHint" Text="Пароль (мин. 4 символа)" Foreground="{StaticResource BrTextFaint}"
+                                           FontSize="14" Margin="13,0,12,0" VerticalAlignment="Center" IsHitTestVisible="False"/>
+                                <PasswordBox x:Name="RegPass" Background="Transparent" BorderThickness="0"
+                                             Foreground="{StaticResource BrText}" CaretBrush="{StaticResource BrAccent}"
+                                             FontSize="14" VerticalContentAlignment="Center" Margin="10,0,10,0"/>
+                            </Grid>
+                            <Grid Height="42" Margin="0,10,0,0">
+                                <Border Background="{StaticResource BrInputBg}" BorderBrush="{StaticResource BrInputBorder}"
+                                        BorderThickness="1" CornerRadius="9"/>
+                                <TextBlock x:Name="RegPass2Hint" Text="Повторите пароль" Foreground="{StaticResource BrTextFaint}"
+                                           FontSize="14" Margin="13,0,12,0" VerticalAlignment="Center" IsHitTestVisible="False"/>
+                                <PasswordBox x:Name="RegPass2" Background="Transparent" BorderThickness="0"
+                                             Foreground="{StaticResource BrText}" CaretBrush="{StaticResource BrAccent}"
+                                             FontSize="14" VerticalContentAlignment="Center" Margin="10,0,10,0"
+                                             KeyDown="RegPass2_KeyDown"/>
+                            </Grid>
+                            <TextBlock x:Name="RegStatus" Foreground="#FFFF6E6E" FontSize="12" Margin="2,8,0,0"
+                                       TextWrapping="Wrap" Visibility="Collapsed"/>
+                            <Button x:Name="RegBtn" Style="{StaticResource AccentBtn}" Content="СОЗДАТЬ АККАУНТ"
+                                    Height="46" Margin="0,14,0,0" Click="RegBtn_Click"/>
+                            <Button x:Name="BackToLoginBtn" Style="{StaticResource GhostBtn}" Content="← Назад к входу"
+                                    Margin="0,10,0,0" Click="BackToLoginBtn_Click"/>
+                        </StackPanel>
+                    </Grid>
+
+                    <!-- ============ MAIN (post-login) ============ -->
+                    <Grid x:Name="MainPanel" Visibility="Collapsed" Margin="26,8,26,18">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- header: hello + logout -->
+                        <Grid Grid.Row="0">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <TextBlock x:Name="HelloText" FontSize="15" FontWeight="SemiBold"
+                                           Foreground="{StaticResource BrText}" VerticalAlignment="Center"/>
+                                <Border x:Name="PremiumBadge" Background="#3359B3FF" CornerRadius="8" Padding="7,2"
+                                        Margin="10,0,0,0" VerticalAlignment="Center">
+                                    <TextBlock x:Name="PremiumBadgeText" FontSize="10" FontWeight="Bold"
+                                               Foreground="#FFD98BFF" Text="PREMIUM"/>
+                                </Border>
+                            </StackPanel>
+                            <Button x:Name="LogoutBtn" Style="{StaticResource GhostBtn}" Content="Выйти"
+                                    HorizontalAlignment="Right" VerticalAlignment="Center" Click="LogoutBtn_Click"/>
+                        </Grid>
+
+                        <!-- game title -->
+                        <Grid Grid.Row="2">
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock x:Name="GameTitle" Text="BERDA SURVIVAL" FontSize="36" FontWeight="Bold"
+                                           Foreground="{StaticResource BrText}" HorizontalAlignment="Center"/>
+                                <TextBlock x:Name="GameState" Text="игру нужно запустить (Berda.exe)" FontSize="12"
+                                           Foreground="{StaticResource BrTextFaint}" HorizontalAlignment="Center" Margin="0,6,0,0"/>
+                                <TextBlock x:Name="PremiumStatus" FontSize="13" Foreground="{StaticResource BrAccent2}"
+                                           HorizontalAlignment="Center" Margin="0,18,0,0"/>
+                                <Button x:Name="PremiumBtn" Style="{StaticResource AccentBtn}" Content="PREMIUM — ввести ключ"
+                                        Width="230" Height="38" HorizontalAlignment="Center" Margin="0,12,0,0"
+                                        Click="PremiumBtn_Click"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <!-- inject button -->
+                        <Button x:Name="InjectBtn" Grid.Row="3" Style="{StaticResource WhiteBtn}"
+                                Content="INJECT" Click="InjectBtn_Click"/>
+
+                        <!-- logs below the button -->
+                        <Grid Grid.Row="4" Margin="0,14,0,0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="40"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Grid.Row="0" Text="ЛОГИ" FontSize="10" FontWeight="Bold"
+                                       Foreground="{StaticResource BrTextFaint}" Margin="2,0,0,4"/>
+                            <ListBox x:Name="LogList" Grid.Row="1" Style="{StaticResource LogList}"/>
+                        </Grid>
+                    </Grid>
+
+                    <!-- ============ PEOPLE OVERLAY ============ -->
+                    <Grid x:Name="PremiumOverlay" Visibility="Collapsed" Background="#99000000"
+                          MouseLeftButtonDown="PremiumOverlay_MouseLeftButtonDown">
+                        <Border x:Name="OverlayCard" Width="330" Height="340" Background="{StaticResource BrBgMid}"
+                                CornerRadius="16" BorderThickness="1" BorderBrush="{StaticResource BrBorder}"
+                                HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20">
+                            <Border.Effect>
+                                <DropShadowEffect BlurRadius="24" ShadowDepth="0" Color="#000000" Opacity="0.35"/>
+                            </Border.Effect>
+                            <Grid Margin="24,20">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Grid.Row="0" Text="АКТИВАЦИЯ PREMIUM" FontSize="17" FontWeight="Bold"
+                                           Foreground="{StaticResource BrText}" HorizontalAlignment="Center" Margin="0,0,0,16"/>
+                                <TextBlock Grid.Row="1" Text="Введите ключ активации" FontSize="12"
+                                           Foreground="{StaticResource BrTextFaint}" HorizontalAlignment="Center" Margin="0,0,0,8"/>
+                                <local:HintBox x:Name="PremiumKey" Grid.Row="2" Hint="XXXX-XXXX-XXXX-XXXX" Height="42"
+                                               Style="{StaticResource HintInput}" KeyDown="PremiumKey_KeyDown"/>
+                                <TextBlock x:Name="PremiumOverlayStatus" Grid.Row="3" Foreground="#FFFF6E6E" FontSize="12"
+                                           Margin="2,8,0,0" TextWrapping="Wrap" Visibility="Collapsed" HorizontalAlignment="Center"/>
+                                <Button x:Name="ActivateBtn" Grid.Row="4" Style="{StaticResource AccentBtn}"
+                                        Content="АКТИВИРОВАТЬ" Height="42" Margin="0,14,0,0" Click="ActivateBtn_Click"/>
+                                <Button x:Name="OverlayCloseBtn" Grid.Row="5" Style="{StaticResource GhostBtn}"
+                                        Content="Отмена (ESC)" Margin="0,6,0,0" Click="OverlayClose_Click"/>
+                            </Grid>
+                        </Border>
+                    </Grid>
+
+                </Grid>
+            </Grid>
+        </Grid>
+    </Border>
+</Window>
