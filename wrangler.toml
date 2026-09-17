@@ -2,11 +2,10 @@ name = "berda-server"
 main = "cloud/worker.js"
 compatibility_date = "2026-09-17"
 
-# Привязку базы D1 удобнее сделать в дашборде:
-#   Workers & Pages -> berda-server -> Settings -> Variables
-#   -> D1 database bindings: variable name DB, database berda-db.
-# Либо раскомментируйте блок и вставьте database_id из консоли D1:
-# [d1_databases]
-# bindings = [
-#   { binding = "DB", database_name = "berda-db", database_id = "PASTE_DATABASE_ID_HERE" },
-# ]
+[vars]
+OWNER_LOGIN = "owner"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "berda-db"
+database_id = "abbdeae7-797a-46ce-b331-0457c06928ae"
